@@ -3,7 +3,7 @@ part of 'state_machine.dart';
 /// This function creates a [StateMachine] with the given [graphBuilder],
 /// [initialState], [sideEffectCreators], and [subscriptions].
 /// This function exists to hide [StateMachineImpl].
-StateMachine createStateMachine<STATE extends StateMachineState,
+StateMachine<STATE, ACTION> createStateMachine<STATE extends StateMachineState,
     ACTION extends StateMachineAction>({
   required GraphBuilder<STATE, ACTION> graphBuilder,
   required STATE initialState,
