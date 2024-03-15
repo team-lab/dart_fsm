@@ -1,16 +1,45 @@
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
 
+sealed class SampleState implements StateMachineState {
+  const SampleState();
+}
+
+final class SampleStateA extends SampleState {
+  const SampleStateA();
+}
+
+final class SampleStateB extends SampleState {
+  const SampleStateB();
+}
+
+sealed class SampleAction implements StateMachineAction {
+  const SampleAction();
+}
+
+final class SampleActionA extends SampleAction {
+  const SampleActionA();
+}
+
 void main() {
-  group('A group of tests', () {
-    final awesome = Awesome();
+  final stateMachineGraph = GraphBuilder<SampleState, SampleAction>()
+    ..state<SampleStateA>(
+          (b) => b
+        ..on<SampleActionA>(
+              (state, action) => b.transitionTo(const SampleStateB()),
+        ),
+    );
 
-    setUp(() {
-      // Additional setup goes here.
-    });
+  final stateMachine = createStateMachine(
+    initialState: const SampleStateA(),
+    graphBuilder: stateMachineGraph,
+  );
 
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
-    });
+  test('transition test', () {
+    expect(stateMachine.state, const SampleStateA());
+
+    stateMachine.dispatch(const SampleActionA());
+
+    expect(stateMachine.state, const SampleStateB());
   });
 }

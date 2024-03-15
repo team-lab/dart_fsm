@@ -3,6 +3,4 @@
 /// More dartdocs go here.
 library;
 
-export 'src/dart_fsm_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/state_machine/state_machine.dart';
