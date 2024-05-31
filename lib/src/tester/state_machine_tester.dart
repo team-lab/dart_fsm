@@ -4,8 +4,8 @@ import 'package:dart_fsm/src/tester/tester_state_machine.dart';
 import 'package:test/test.dart';
 
 /// This class is used to test the state machine.
-class StateMachineTester<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> {
+class StateMachineTester<STATE extends Object,
+    ACTION extends Object> {
   /// Creates a state machine tester.
   StateMachineTester({
     required GraphBuilder<STATE, ACTION> graphBuilder,
@@ -77,8 +77,8 @@ class StateMachineTester<STATE extends StateMachineState,
 }
 
 /// This class is used to store the test case information.
-final class SMAssertObject<S extends StateMachineState,
-    A extends StateMachineAction> {
+final class SMAssertObject<S extends Object,
+    A extends Object> {
   /// Creates a test case object.
   const SMAssertObject({
     required this.action,

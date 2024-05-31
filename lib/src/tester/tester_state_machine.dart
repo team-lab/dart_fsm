@@ -2,8 +2,8 @@ import 'package:dart_fsm/dart_fsm.dart';
 import 'package:dart_fsm/src/state_machine/implementation/state_machine_impl.dart';
 
 /// A state machine for testing.
-class TesterStateMachine<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> extends StateMachineImpl<STATE, ACTION> {
+class TesterStateMachine<STATE extends Object,
+    ACTION extends Object> extends StateMachineImpl<STATE, ACTION> {
   /// Creates a state machine for testing.
   TesterStateMachine({
     required super.graphBuilder,

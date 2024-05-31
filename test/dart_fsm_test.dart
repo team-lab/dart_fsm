@@ -1,7 +1,7 @@
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
 
-sealed class SampleState implements StateMachineState {
+sealed class SampleState {
   const SampleState();
 }
 
@@ -13,7 +13,7 @@ final class SampleStateB extends SampleState {
   const SampleStateB();
 }
 
-sealed class SampleAction implements StateMachineAction {
+sealed class SampleAction {
   const SampleAction();
 }
 

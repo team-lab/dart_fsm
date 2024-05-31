@@ -8,8 +8,8 @@ part of '../state_machine.dart';
 /// and instruct [StateMachine] to attempt to reconnect if the connection
 /// is lost.
 // ignore: one_member_abstracts
-abstract interface class Subscription<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> {
+abstract interface class Subscription<STATE extends Object,
+    ACTION extends Object> {
   const Subscription();
 
   /// The method executed after the instance of [Subscription] is registered

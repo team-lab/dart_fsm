@@ -4,8 +4,8 @@ import 'package:collection/collection.dart';
 import 'package:dart_fsm/dart_fsm.dart';
 
 /// A state machine implementation.
-class StateMachineImpl<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> implements StateMachine<STATE, ACTION> {
+class StateMachineImpl<STATE extends Object, ACTION extends Object>
+    implements StateMachine<STATE, ACTION> {
   /// Creates a state machine.
   /// [graphBuilder] is a builder for the state machine's graph.
   /// [initialState] is the initial state of the state machine.
@@ -14,8 +14,8 @@ class StateMachineImpl<STATE extends StateMachineState,
   StateMachineImpl({
     required GraphBuilder<STATE, ACTION> graphBuilder,
     required STATE initialState,
-    List<SideEffectCreator<StateMachineState, StateMachineAction, SideEffect>>
-        sideEffectCreators = const [],
+    List<SideEffectCreator<Object, Object, SideEffect>> sideEffectCreators =
+        const [],
     List<Subscription<STATE, ACTION>> subscriptions = const [],
   })  : _initialState = initialState,
         _graph = graphBuilder.build(),
@@ -35,9 +35,7 @@ class StateMachineImpl<STATE extends StateMachineState,
 
   final STATE _initialState;
 
-  final List<
-          SideEffectCreator<StateMachineState, StateMachineAction, SideEffect>>
-      _sideEffectCreators;
+  final List<SideEffectCreator<Object, Object, SideEffect>> _sideEffectCreators;
 
   final List<Subscription<STATE, ACTION>> _subscriptions;
 

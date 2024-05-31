@@ -3,8 +3,8 @@ import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
 
 /// This is a mock implementation of [StateMachine] that can be used for testing
-class MockStateMachine<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> implements StateMachine<STATE, ACTION> {
+class MockStateMachine<STATE extends Object,
+    ACTION extends Object> implements StateMachine<STATE, ACTION> {
   /// Creates a mock state machine.
   MockStateMachine(STATE initialState) : _state = initialState {
     _controller.close();

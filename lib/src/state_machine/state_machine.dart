@@ -5,14 +5,12 @@ import 'package:dart_fsm/src/state_machine/implementation/state_machine_impl.dar
 part './side_effect/side_effect_creators.dart';
 part './side_effect/side_effects.dart';
 part './subscription/subscription.dart';
-part 'action_interface.dart';
 part 'graph.dart';
-part 'state_interface.dart';
 part 'state_machine_creator.dart';
 
 /// A state machine.
-abstract interface class StateMachine<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> {
+abstract interface class StateMachine<STATE extends Object,
+    ACTION extends Object> {
   const StateMachine();
 
   /// The current state of the state machine.

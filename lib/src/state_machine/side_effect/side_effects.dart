@@ -12,8 +12,8 @@ abstract interface class SideEffect {
 
 /// [SideEffect] executed after the [ACTION] is dispatched and the [STATE] is
 /// changed. This [SideEffect] is executed only when the transition is made.
-abstract interface class AfterSideEffect<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> extends SideEffect {
+abstract interface class AfterSideEffect<STATE extends Object,
+    ACTION extends Object> extends SideEffect {
   const AfterSideEffect();
 
   /// The method executed after the instance of [AfterSideEffect] is generated
@@ -29,8 +29,8 @@ abstract interface class AfterSideEffect<STATE extends StateMachineState,
 /// [SideEffect] executed after the [ACTION] is dispatched, executed before the
 /// [STATE] is changed, and executed regardless of whether the transition is
 /// made.
-abstract interface class BeforeSideEffect<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> extends SideEffect {
+abstract interface class BeforeSideEffect<STATE extends Object,
+    ACTION extends Object> extends SideEffect {
   const BeforeSideEffect();
 
   /// The method executed after the instance of [BeforeSideEffect] is generated
@@ -46,8 +46,8 @@ abstract interface class BeforeSideEffect<STATE extends StateMachineState,
 /// [SideEffect] executed after the [ACTION] is dispatched, executed after the
 /// all other processes are finished, and executed regardless of whether the
 /// transition is made.
-abstract interface class FinallySideEffect<STATE extends StateMachineState,
-    ACTION extends StateMachineAction> extends SideEffect {
+abstract interface class FinallySideEffect<STATE extends Object,
+    ACTION extends Object> extends SideEffect {
   const FinallySideEffect();
 
   /// The method executed after the instance of [FinallySideEffect] is generated
