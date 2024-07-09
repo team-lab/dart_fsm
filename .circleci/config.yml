@@ -1,0 +1,64 @@
+version: 2.1
+
+commands:
+  install_dart:
+    description: "Install Dart from .dart-version with caching"
+    steps:
+      - run:
+          name: Check Dart Installation
+          command: |
+            echo "Installing Dart"
+            DART_VERSION=$(cat .dart-version)
+            sudo apt update
+            sudo apt install -y apt-transport-https
+            sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+            sudo sh -c 'wget -qO- https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
+            sudo apt update
+            sudo apt-cache madison dart
+            sudo apt install -y dart=$DART_VERSION
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/base:stable
+    resource_class: medium+
+    steps:
+      - checkout
+      - install_dart
+      - run:
+          name: Run Lint
+          command: |
+            echo "Running lint"
+            dart pub get
+            dart analyze
+      - run:
+          name: Run Tests
+          command: |
+            echo "Running tests"
+            dart pub get
+            dart test
+#
+#  publish:
+#    docker:
+#      - image: cimg/base:stable
+#    resource_class: medium+
+#    steps:
+#      - checkout
+#      - install_dart
+#      - run:
+#          name: Publish to Github Packages
+#          command: |
+#            dart pub publish --dry-run
+
+workflows:
+  version: 2
+  test-and-lint:
+    jobs:
+      - build-and-test
+#      - publish:
+#          requires:
+#            - build-and-test
+#          filters:
+#            branches:
+#              only:
+#                - main
