@@ -1,6 +1,7 @@
 part of '../state_machine.dart';
 
 /// Interface of the class that generates SideEffect
+// ignore: one_member_abstracts
 abstract interface class SideEffectCreator<STATE extends Object,
     ACTION extends Object, SIDE_EFFECT extends SideEffect> {
   const SideEffectCreator._();
