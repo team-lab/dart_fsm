@@ -138,7 +138,7 @@ class StateMachineImpl<STATE extends Object, ACTION extends Object>
     Valid<STATE, ACTION> validTransition,
   ) async {
     findAfterJob(action, validTransition).forEach((sideEffect) {
-      unawaited(sideEffect.execute(this, validTransition));
+      unawaited(sideEffect.execute(this));
     });
     if (_isEnd(validTransition.toState)) {
       close();

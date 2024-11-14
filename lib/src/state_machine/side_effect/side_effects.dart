@@ -22,7 +22,6 @@ abstract interface class AfterSideEffect<STATE extends Object,
   /// generated are passed as arguments.
   Future<void> execute(
     StateMachine<STATE, ACTION> stateMachine,
-    Valid<STATE, ACTION> validTransition,
   );
 }
 
