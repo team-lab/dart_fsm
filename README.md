@@ -11,47 +11,35 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-このパッケージが役立つかどうかを潜在的なユーザーが知るのに役立つ短い説明をここに記載してください。
-
 # dart_fsm
-Dartで有限オートマトンを実現するためのパッケージ。
+A package for implementing finite state machines in Dart.
 
-## 有限オートマトンについて
-有限オートマトンとは、有限個の状態と遷移と動作の組み合わせからなる数学的に抽象化された「ふるまいのモデル」です。
-アプリケーションの取りうる状態を有限オートマトンとしてモデル化することで以下のような恩恵が得られます。
-* アプリケーションの設計段階での考慮漏れが少なくなる
-* 設計段階で有限オートマトンを設計することで、設計と実装の間のギャップを埋めることができる
-* 状態を有限オートマトンに則って定義することで不要なnullチェックを排除することができる
-* 状態を有限オートマトンに則って定義することで、考慮していない存在しない状態の発生を防ぐことができる
-* アプリケーションの状態が意図せず変更されることを防ぐことができる
-* テストが容易になる
+## About Finite State Machines
+A finite state machine is a mathematically abstracted "behavior model" composed of a finite number of states, transitions, and actions. Modeling the possible states of an application as a finite state machine provides several benefits:
+* Reduces the likelihood of missed considerations during the application design phase
+* Bridges the gap between design and implementation by designing the finite state machine at the design stage
+* Eliminates unnecessary null checks by defining states in line with the finite state machine
+* Prevents the occurrence of unforeseen non-existent states by defining states in accordance with the finite state machine
+* Prevents unintentional changes to the application state
+* Makes testing easier
 
-有限オートマトンを用いたアプリケーションの設計は、アプリケーションの複雑さが増すにつれて有効性が高まります。
+The effectiveness of designing applications using finite state machines increases as the complexity of the application grows.
 
-## モチベーション
-有限オートマトンを用いた状態管理が有用であることは説明した通りですが、switch文やif文を用いた有限オートマトンの実装は
-状態の遷移が複雑になるにつれて可読性が低下し、バグの発生源となりやすくなります。
-また、開発者により状態の遷移が異なる実装になることがあり、コードの保守性が低下します。
-そのため、有限オートマトンを用いた状態管理を行う際には、状態の遷移を明確に定義し、状態の遷移を自動的に行う仕組みが必要です。
-また、アプリケーションでの状態管理に使用する場合は状態の遷移にともなう副作用としてApiの呼び出しなどを発生させたい場合があります。
-そのような副作用の実装もパッケージを利用しない場合開発者により異なる実装になり、コードの保守性が低下することがあります。
+## Motivation
+While state management using finite state machines is useful, implementing finite state machines using switch statements or if statements can become unreadable and prone to bugs as state transitions become complex. Additionally, different developers may implement state transitions differently, reducing code maintainability. Therefore, when managing state with finite state machines, it is necessary to clearly define state transitions and automate them. Furthermore, when using state management in applications, there may be cases where you want to trigger side effects, such as API calls, during state transitions. Without a package, varying implementations by developers can reduce code maintainability.
 
-そのため、本パッケージでは有限オートマトンを用いた状態管理を行う際に状態の遷移を明確に定義し、状態の遷移を自動的に行う仕組みを提供します。
-また、状態の遷移にともなう副作用の実装もパッケージ内で定義することで、開発者による実装の違いを排除し、コードの保守性を向上させます。
+This package provides a mechanism to clearly define state transitions when managing state with finite state machines and automates state transitions. It also defines the implementation of side effects within the package to eliminate implementation differences between developers and improves code maintainability.
 
+## Features
+1. DSL (Domain Specific Language) for describing state transition diagrams without side effects
+2. Providing implementation methods for side effects accompanying state transitions
+3. Providing implementation methods for finite state machines in scenarios where values flow intermittently, such as Streams
+4. Providing implementation methods for tests using finite state machines
+5. Providing implementation methods for testing finite state machines themselves
 
-## 機能
-1. 副作用の入らない状態遷移図の記述DSL
-2. 状態遷移に伴う副作用の実装方法の提供
-3. Streamなどの断続的に値が流れてくる状況における有限オートマトンの実装方法の提供
-4. 有限オートマトンを用いたテストの実装方法の提供
-5. 有限オートマトン自体のテストの実装方法の提供
-
-## 使用方法
-### 状態遷移図の記述
-有限オートマトンは通常状態遷移図を用いて表現されます。
-本パッケージでは状態遷移図を記述するためのDSLを提供します。
-例えば以下のような有限オートマトンの遷移図を考えてみましょう。
+## Usage
+### Describing State Transition Diagrams
+Finite state machines are typically represented using state transition diagrams. This package provides a DSL for describing state transition diagrams. Consider the following state transition diagram:
 ```mermaid
 stateDiagram-v2
     [*] --> Initial
@@ -59,8 +47,7 @@ stateDiagram-v2
     Loading --> Success: Succeed
     Loading --> Error: Fail
 ```
-この遷移図をdart_fsmで記述します。まずは状態とアクションの定義を行います。
-状態の定義はsealed classを用いて以下のように行います。
+We will describe this transition diagram using dart_fsm. First, define the states and actions. States are defined using sealed classes as shown below.
 ```dart
 sealed class SampleState {
   const SampleState();
@@ -87,7 +74,7 @@ final class SampleStateError extends SampleState {
   final Exception exception;
 }
 ```
-アクションについても同様にsealed classを用いて以下のように行います。
+Similarly, actions are defined using sealed classes as shown below.
 ```dart
 sealed class SampleAction {
   const SampleAction();
@@ -109,9 +96,8 @@ final class SampleActionFail extends SampleAction {
   final Exception exception;
 }
 ```
-次に状態遷移図を記述します。本パッケージにはGraphBuilderというクラスが用意されており、これを用いて状態遷移図を記述します。
-まずGraphBuilderをインスタンス化し、stateとonメソッドを用いて状態遷移図を記述します。
-onメソッドは遷移前の状態とアクションを受け取り、遷移後の状態を返す関数を引数に取ります。
+Next, describe the state transition diagram. This package provides a class called `GraphBuilder`, which can be used to describe state transition diagrams. Instantiate the `GraphBuilder` and use the `state` and `on` methods to describe the state transition diagram.
+The `on` method takes a function that accepts the previous state and action and returns the next state as arguments.
 ```dart
 final stateGraph = GraphBuilder<SampleState, SampleAction>()
   ..state<SampleStateInitial>(
@@ -130,18 +116,18 @@ final stateGraph = GraphBuilder<SampleState, SampleAction>()
       ),
   );
 ```
-状態遷移図の記述が完了したら、状態遷移図を用いて有限オートマトンを生成します。
+After describing the state transition diagram, generate the finite state machine using the state transition diagram.
 ```dart
 final stateMachine = createStateMachine(
   initialState: const SampleStateInitial(),
   graphBuilder: stateGraph,
 );
 ```
-これで有限オートマトンが生成されました。状態遷移はdispatchメソッドを用いて有限オートマトンにアクションを発行することで行います。
+This generates the finite state machine. State transitions are performed by issuing actions to the finite state machine using the `dispatch` method.
 ```dart
 stateMachine.dispatch(const SampleActionFetch());
 ```
-有限オートマトンの状態はstateプロパティ、またはstateStreamプロパティを用いてStreamで取得することができます。
+The state of the finite state machine can be obtained using the `state` property or the `stateStream` property to acquire a Stream.
 ```dart
 print(stateMachine.state); 
 stateMachine.stateStream.listen((state) {
@@ -149,8 +135,8 @@ stateMachine.stateStream.listen((state) {
 });
 ```
 
-### 副作用の実装
-先ほどの状態遷移図をもう一度見てみましょう。
+### Implementing Side Effects
+Let's take another look at the state transition diagram:
 ```mermaid
 stateDiagram-v2
     [*] --> Initial
@@ -158,17 +144,16 @@ stateDiagram-v2
     Loading --> Success: Succeed
     Loading --> Error: Fail
 ```
-この状態遷移図において、Loading状態に遷移した際にはApiを呼び出す副作用を発生させたいとします。
-このような副作用を発生させるためにはSideEffectCreatorおよびSideEffectを用いて副作用を定義します。
-SideEffectCreatorは副作用を生成するためのクラスであり、SideEffectは副作用を表すクラスです。
-Before、After、Finallyの3種類が存在し以下のタイミングで呼び出されます。
-* AfterSideEffectCreator: アクションが発行された直後、状態遷移前に実行される
-* BeforeSideEffectCreator: アクションが発行され、状態の遷移が行われた後に実行される
-* FinallySideEffectCreator: アクションが発行された後、状態の遷移が行われたか否かにかかわらず実行される
+Suppose you want to trigger a side effect of making an API call when transitioning to the `Loading` state. To implement such side effects, define the side effects using `SideEffectCreator` and `SideEffect`. `SideEffectCreator` is a class for generating side effects, and `SideEffect` represents the side effects.
+There are three types: `After`, `Before`, and `Finally`, which are called at the following times:
 
-最も使用頻度が高いのは多くの場合でAfterSideEffectCreatorであり、
-遷移にともなうApiの呼び出しやデータの保存などの副作用を発生させるための使用に適しています。
-では、Loading状態に遷移した際にApiを呼び出す副作用を発生させるための実装を行います。
+•   `AfterSideEffectCreator`: Executed immediately after an action is issued, before the state transitions.
+•   `BeforeSideEffectCreator`: Executed after an action is issued and the state transition has occurred.
+•   `FinallySideEffectCreator`: Executed after an action is issued, regardless of whether the state transition has occurred.
+
+In many cases, `AfterSideEffectCreator` is the most frequently used and is suitable for generating side effects such as API calls or saving data that occur as a result of state transitions.
+
+Let's implement the side effect to make an API call when transitioning to the `Loading` state.
 ```dart
 final class SampleSideEffectCreator
     implements AfterSideEffectCreator<SampleState, SampleAction, SampleSideEffect> {
@@ -204,10 +189,9 @@ final class SampleSideEffect
 }
 ```
 > [!NOTE]
-> ApiClientはApiを呼び出すためのクラスであり、コンストラクタで受け取るようにしていますが、これは疎結合性を高めるためです。
+> The `ApiClient` is a class for making API calls, and it is received in the constructor to enhance loose coupling.
 
-これでApiを呼び出すSampleSideEffectと、遷移時の条件によってSampleSideEffectを生成するSampleSideEffectCreatorが定義されました。
-次にこれらを有限オートマトンに登録します。
+Now that the `SampleSideEffect` to make API calls and the `SampleSideEffectCreator` to generate the `SampleSideEffect` based on transition conditions have been defined, register them with the finite state machine.
 ```dart
 final stateMachine = createStateMachine(
   initialState: const SampleStateInitial(),
@@ -215,13 +199,11 @@ final stateMachine = createStateMachine(
   sideEffectCreator: SampleSideEffectCreator(apiClient),
 );
 ```
-これでApiを呼び出す副作用が有限オートマトンに登録されました。
-状態遷移が行われるたびにSampleSideEffectCreatorが呼び出され、その状態遷移を発生させたアクションがFetchであればSampleSideEffectが生成され、Apiが呼び出されます。
+This registers the side effect to make API calls with the finite state machine. Each time a state transition occurs, the `SampleSideEffectCreator` is called, and if the action that caused the transition is `Fetch`, a `SampleSideEffect` is generated, and the API is called.
 
-### Streamなどの断続的に値が流れてくる状況における有限オートマトンの実装
-Streamなどの断続的に値が流れてくる状況において有限オートマトンを実装する場合、Subscriptionというクラスを用いて実装します。
-SubscriptionはStateMachineのインスタンが生成される時に1回のみ呼び出され、その後はStateMachineのインスタンスが破棄されるまで有効です。
-以下のような状態遷移図を考えてみましょう。
+### Implementing Finite State Machines in Intermittent Value Scenarios such as Streams
+
+When implementing finite state machines in scenarios where values flow intermittently, such as Streams, the `Subscription` class is used. `Subscription` is called only once when the `StateMachine` instance is generated and remains valid until the `StateMachine` instance is disposed of. Consider the following state transition diagram:
 ```mermaid
 stateDiagram-v2
     [*] --> Initial
@@ -230,8 +212,7 @@ stateDiagram-v2
     Success --> Success: UpdateData
     Loading --> Error: Fail
 ```
-Success状態に遷移した後もUpdateDataアクションが発行されるたびにデータを更新するとします。
-StreamをもとにUpdateDataアクションを発行するSubscriptionを実装します。
+Suppose you want to update the data each time the `UpdateData` action is issued after transitioning to the `Success` state. Implement a `Subscription` that issues the `SampleActionUpdate` action based on a Stream.
 ```dart
 final class SampleSubscription
     implements Subscription<SampleState, SampleAction> {
@@ -254,8 +235,7 @@ final class SampleSubscription
   }
 }
 ```
-これでWebSocketClientからデータを受け取り、データをもとにSampleActionUpdateを発行するSubscriptionが定義されました。
-これをSideEffectCreator同様にStateMachineに登録します。
+This defines a `Subscription` to receive data from the `WebSocketClient` and issue `SampleActionUpdate` based on the data. Register this `Subscription` with the `StateMachine` similarly to the `SideEffectCreator`.
 ```dart
 final stateMachine = createStateMachine(
   initialState: const SampleStateInitial(),
@@ -264,13 +244,13 @@ final stateMachine = createStateMachine(
   subscription: SampleSubscription(webSocketClient),
 );
 ```
-これでWebSocketClientからデータを受け取り、データをもとにSampleActionUpdateを発行するSubscriptionが有限オートマトンに登録されました。
+This registers the `Subscription` with the finite state machine to receive data from the `WebSocketClient` and issue `SampleActionUpdate` based on the data.
 
-### 有限オートマトンを用いたテストの実装
+### Implementing Tests Using Finite State Machines
 TODO
 
 
-## 使用例
+## Example Usage
 ```dart
 import 'package:dart_fsm/dart_fsm.dart';
 
