@@ -1,3 +1,6 @@
+## 1.1.1
+- chore: downgrade meta package version to 1.15.0
+
 ## 1.1.0
 - fix: Fixed that AfterSideEffectCreator and FinallySideEffectCreator was treating the state after transition as prevState.
 - fix: Block duplicate call state and on method logic
