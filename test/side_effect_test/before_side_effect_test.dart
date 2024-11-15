@@ -1,5 +1,6 @@
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
+import '../test_state_graph.dart';
 import '../test_state_machine_action.dart';
 import '../test_state_machine_state.dart';
 
@@ -34,26 +35,6 @@ final class SampleBeforeSideEffect
 }
 
 void main() {
-  final stateMachineGraph = GraphBuilder<SampleState, SampleAction>()
-    ..state<SampleStateA>(
-          (b) => b
-        ..on<SampleActionA>(
-              (state, action) => b.transitionTo(const SampleStateB()),
-        )
-        ..on<SampleActionC>(
-              (state, action) => b.transitionTo(const SampleStateC()),
-        ),
-    )
-    ..state<SampleStateB>(
-          (b) => b
-        ..on<SampleActionB>(
-              (state, action) => b.transitionTo(const SampleStateA()),
-        ),
-    )
-    ..state<SampleStateC>(
-          (b) => b..noTransitionOn<SampleActionD>(),
-    );
-
   group('BeforeSideEffectCreator test', () {
     test('create method called when valid transition', () {
       var isSideEffectCreatorCalled = false;
@@ -69,7 +50,7 @@ void main() {
 
       createStateMachine(
         initialState: const SampleStateA(),
-        graphBuilder: stateMachineGraph,
+        graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
       ).dispatch(const SampleActionA());
 
@@ -90,7 +71,7 @@ void main() {
 
       createStateMachine(
         initialState: const SampleStateA(),
-        graphBuilder: stateMachineGraph,
+        graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
       ).dispatch(const SampleActionB());
 
@@ -114,7 +95,7 @@ void main() {
 
       createStateMachine(
         initialState: const SampleStateA(),
-        graphBuilder: stateMachineGraph,
+        graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
       ).dispatch(const SampleActionA());
 
