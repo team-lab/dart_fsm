@@ -1,11 +1,13 @@
+// Copyright (c) 2024, teamLab inc.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 import 'package:collection/collection.dart';
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:dart_fsm/src/tester/tester_state_machine.dart';
 import 'package:test/test.dart';
 
 /// This class is used to test the state machine.
-class StateMachineTester<STATE extends Object,
-    ACTION extends Object> {
+class StateMachineTester<STATE extends Object, ACTION extends Object> {
   /// Creates a state machine tester.
   StateMachineTester({
     required GraphBuilder<STATE, ACTION> graphBuilder,
@@ -77,8 +79,7 @@ class StateMachineTester<STATE extends Object,
 }
 
 /// This class is used to store the test case information.
-final class SMAssertObject<S extends Object,
-    A extends Object> {
+final class SMAssertObject<S extends Object, A extends Object> {
   /// Creates a test case object.
   const SMAssertObject({
     required this.action,

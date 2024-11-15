@@ -1,10 +1,13 @@
+// Copyright (c) 2024, teamLab inc.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 import 'dart:async';
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
 
 /// This is a mock implementation of [StateMachine] that can be used for testing
-class MockStateMachine<STATE extends Object,
-    ACTION extends Object> implements StateMachine<STATE, ACTION> {
+class MockStateMachine<STATE extends Object, ACTION extends Object>
+    implements StateMachine<STATE, ACTION> {
   /// Creates a mock state machine.
   MockStateMachine(STATE initialState) : _state = initialState {
     _controller.close();
