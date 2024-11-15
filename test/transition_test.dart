@@ -77,5 +77,19 @@ void main() {
         expect(stateMachine.state, const TestStateA());
       }
     });
+    test('test transition using stateStream', () {
+      final stateMachine = createStateMachine(
+        initialState: const TestStateA(),
+        graphBuilder: testStateGraph,
+      );
+
+      expect(stateMachine.state, const TestStateA());
+
+      stateMachine.stateStream.listen((state) {
+        expect(state, const TestStateB());
+      });
+
+      stateMachine.dispatch(const TestActionA());
+    });
   });
 }
