@@ -91,5 +91,38 @@ void main() {
 
       stateMachine.dispatch(const TestActionA());
     });
+    test('duplication GraphBuilder state method call cause error', () {
+      expect(
+        () => GraphBuilder<TestState, TestAction>()
+          ..state<TestStateA>(
+            (b) => b
+              ..on<TestActionA>(
+                (state, action) => b.transitionTo(const TestStateB()),
+              ),
+          )
+          ..state<TestStateA>(
+            (b) => b
+              ..on<TestActionA>(
+                (state, action) => b.transitionTo(const TestStateB()),
+              ),
+          ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+    test('duplicate GraphBuilder on method call cause error', () {
+      expect(
+        () => GraphBuilder<TestState, TestAction>()
+          ..state<TestStateA>(
+            (b) => b
+              ..on<TestActionA>(
+                (state, action) => b.transitionTo(const TestStateB()),
+              )
+              ..on<TestActionA>(
+                (state, action) => b.transitionTo(const TestStateB()),
+              ),
+          ),
+        throwsA(isA<AssertionError>()),
+      );
+    });
   });
 }
