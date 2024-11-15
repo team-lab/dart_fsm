@@ -127,7 +127,8 @@ class StateMachineImpl<STATE extends Object, ACTION extends Object>
     final sideEffects = <AfterSideEffect>[];
     for (final sideEffectCreator
         in _sideEffectCreators.whereType<AfterSideEffectCreator>()) {
-      final sideEffect = sideEffectCreator.create(_state, action);
+      final sideEffect =
+          sideEffectCreator.create(validTransition.fromState, action);
       if (sideEffect != null) {
         sideEffects.add(sideEffect);
       }
