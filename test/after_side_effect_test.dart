@@ -1,61 +1,30 @@
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
-import '../test_state_graph.dart';
-import '../test_state_machine_action.dart';
-import '../test_state_machine_state.dart';
-
-final class SampleAfterSideEffectCreator
-    implements
-        AfterSideEffectCreator<SampleState, SampleAction,
-            SampleAfterSideEffect> {
-  const SampleAfterSideEffectCreator(this.testCreate);
-
-  final SampleAfterSideEffect? Function(
-    SampleState prevState,
-    SampleAction action,
-  ) testCreate;
-
-  @override
-  SampleAfterSideEffect? create(SampleState prevState, SampleAction action) {
-    return testCreate(prevState, action);
-  }
-}
-
-final class SampleAfterSideEffect
-    implements AfterSideEffect<SampleState, SampleAction> {
-  const SampleAfterSideEffect(this.testExecute);
-
-  final Future<void> Function(
-    StateMachine<SampleState, SampleAction> stateMachine,
-  ) testExecute;
-
-  @override
-  Future<void> execute(
-    StateMachine<SampleState, SampleAction> stateMachine,
-  ) async {
-    await testExecute(stateMachine);
-  }
-}
+import 'test_state_machine/test_side_effect_creators.dart';
+import 'test_state_machine/test_side_effects.dart';
+import 'test_state_machine/test_state_graph.dart';
+import 'test_state_machine/test_state_machine_action.dart';
+import 'test_state_machine/test_state_machine_state.dart';
 
 void main() {
   group('AfterSideEffectCreator test', () {
     test('create method called when valid transition', () {
       var isSideEffectCreatorCalled = false;
 
-      final sideEffectCreator = SampleAfterSideEffectCreator(
+      final sideEffectCreator = TestAfterSideEffectCreator(
         (prevState, action) {
-          expect(prevState, const SampleStateA());
-          expect(action, const SampleActionA());
+          expect(prevState, const TestStateA());
+          expect(action, const TestActionA());
           isSideEffectCreatorCalled = true;
           return null;
         },
       );
 
       createStateMachine(
-        initialState: const SampleStateA(),
+        initialState: const TestStateA(),
         graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
-      ).dispatch(const SampleActionA());
+      ).dispatch(const TestActionA());
 
       expect(isSideEffectCreatorCalled, isTrue);
     });
@@ -63,20 +32,20 @@ void main() {
     test('create method called when noTransition valid transition', () {
       var isSideEffectCreatorCalled = false;
 
-      final sideEffectCreator = SampleAfterSideEffectCreator(
+      final sideEffectCreator = TestAfterSideEffectCreator(
         (prevState, action) {
-          expect(prevState, const SampleStateC());
-          expect(action, const SampleActionD());
+          expect(prevState, const TestStateC());
+          expect(action, const TestActionD());
           isSideEffectCreatorCalled = true;
           return null;
         },
       );
 
       createStateMachine(
-        initialState: const SampleStateC(),
+        initialState: const TestStateC(),
         graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
-      ).dispatch(const SampleActionD());
+      ).dispatch(const TestActionD());
 
       expect(isSideEffectCreatorCalled, isTrue);
     });
@@ -84,7 +53,7 @@ void main() {
     test('not create method called when invalid transition', () {
       var isSideEffectCreatorCalled = false;
 
-      final sideEffectCreator = SampleAfterSideEffectCreator(
+      final sideEffectCreator = TestAfterSideEffectCreator(
         (prevState, action) {
           isSideEffectCreatorCalled = true;
           return null;
@@ -92,10 +61,10 @@ void main() {
       );
 
       createStateMachine(
-        initialState: const SampleStateA(),
+        initialState: const TestStateA(),
         graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
-      ).dispatch(const SampleActionB());
+      ).dispatch(const TestActionB());
 
       expect(isSideEffectCreatorCalled, isFalse);
     });
@@ -103,12 +72,12 @@ void main() {
     test('execute method called when create method returns side effect', () {
       var isSideEffectExecuteCalled = false;
 
-      final sideEffectCreator = SampleAfterSideEffectCreator(
+      final sideEffectCreator = TestAfterSideEffectCreator(
         (prevState, action) {
-          return SampleAfterSideEffect(
+          return TestAfterSideEffect(
             (stateMachine) {
               // state transition is done
-              expect(stateMachine.state, const SampleStateB());
+              expect(stateMachine.state, const TestStateB());
               isSideEffectExecuteCalled = true;
               return Future.value();
             },
@@ -117,23 +86,26 @@ void main() {
       );
 
       createStateMachine(
-        initialState: const SampleStateA(),
+        initialState: const TestStateA(),
         graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
-      ).dispatch(const SampleActionA());
+      ).dispatch(const TestActionA());
 
       expect(isSideEffectExecuteCalled, isTrue);
     });
 
-    test('execute method called when create method returns side effect and noTransition valid transition', () {
+    test(
+        // ignore: lines_longer_than_80_chars
+        'execute method called when create method returns side effect and noTransition valid transition',
+        () {
       var isSideEffectExecuteCalled = false;
 
-      final sideEffectCreator = SampleAfterSideEffectCreator(
+      final sideEffectCreator = TestAfterSideEffectCreator(
         (prevState, action) {
-          return SampleAfterSideEffect(
+          return TestAfterSideEffect(
             (stateMachine) {
               // state transition is done
-              expect(stateMachine.state, const SampleStateC());
+              expect(stateMachine.state, const TestStateC());
               isSideEffectExecuteCalled = true;
               return Future.value();
             },
@@ -142,14 +114,12 @@ void main() {
       );
 
       createStateMachine(
-        initialState: const SampleStateC(),
+        initialState: const TestStateC(),
         graphBuilder: testStateGraph,
         sideEffectCreators: [sideEffectCreator],
-      ).dispatch(const SampleActionD());
+      ).dispatch(const TestActionD());
 
       expect(isSideEffectExecuteCalled, isTrue);
     });
-
-    
   });
 }

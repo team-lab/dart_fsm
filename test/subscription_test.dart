@@ -1,47 +1,25 @@
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
 
-import '../test_state_graph.dart';
-import '../test_state_machine_action.dart';
-import '../test_state_machine_state.dart';
-
-final class SampleSubscription
-    implements Subscription<SampleState, SampleAction> {
-  const SampleSubscription({
-    required this.testSubscribe,
-    required this.testDispose,
-  });
-
-  final void Function(StateMachine<SampleState, SampleAction> stateMachine)
-      testSubscribe;
-  final void Function() testDispose;
-
-  @override
-  void subscribe(StateMachine<SampleState, SampleAction> stateMachine) {
-    testSubscribe(stateMachine);
-  }
-
-  @override
-  void dispose() {
-    testDispose();
-  }
-}
+import 'test_state_machine/test_state_graph.dart';
+import 'test_state_machine/test_state_machine_state.dart';
+import 'test_state_machine/test_subscription.dart';
 
 void main() {
   group('Subscription Test', () {
     test('subscribe method called when state machine created', () {
       var isSubscriptionCalled = false;
 
-      final subscription = SampleSubscription(
+      final subscription = TestSubscription(
         testSubscribe: (stateMachine) {
-          expect(stateMachine.state, const SampleStateA());
+          expect(stateMachine.state, const TestStateA());
           isSubscriptionCalled = true;
         },
         testDispose: () {},
       );
 
       createStateMachine(
-        initialState: const SampleStateA(),
+        initialState: const TestStateA(),
         graphBuilder: testStateGraph,
         subscriptions: [subscription],
       );
@@ -52,7 +30,7 @@ void main() {
     test('dispose method called when valid transition', () {
       var isDisposeCalled = false;
 
-      final subscription = SampleSubscription(
+      final subscription = TestSubscription(
         testSubscribe: (stateMachine) {},
         testDispose: () {
           isDisposeCalled = true;
@@ -60,7 +38,7 @@ void main() {
       );
 
       final stateMachine = createStateMachine(
-        initialState: const SampleStateA(),
+        initialState: const TestStateA(),
         graphBuilder: testStateGraph,
         subscriptions: [subscription],
       );
