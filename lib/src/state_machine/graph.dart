@@ -121,6 +121,10 @@ class GraphBuilder<STATE extends Object, ACTION extends Object> {
   void state<ON_STATE extends STATE>(
     StateConfigBuilderFunction<STATE, ACTION, ON_STATE> stateConfigBuilder,
   ) {
+    assert(
+      _stateConfigMap[Matcher<ON_STATE>()] == null,
+      'Duplicate state: $ON_STATE',
+    );
     // Generate a StateConfigBuilder here and register it in the Map
     _stateConfigMap[Matcher<ON_STATE>()] =
         stateConfigBuilder(StateConfigBuilder<STATE, ACTION, ON_STATE>())
@@ -143,6 +147,10 @@ class StateConfigBuilder<STATE extends Object, ACTION extends Object,
   void on<ON_ACTION extends ACTION>(
     StateTransitionFunction<STATE, ON_ACTION, ON_STATE> transition,
   ) {
+    assert(
+      _stateFactor.transitionMap[Matcher<ON_ACTION>()] == null,
+      'Duplicate action: $ON_ACTION',
+    );
     _stateFactor.transitionMap[Matcher<ON_ACTION>()] = (currentState, action) {
       return transition(currentState as ON_STATE, action as ON_ACTION);
     };
