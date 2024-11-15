@@ -5,6 +5,7 @@ part of 'state_machine.dart';
 
 /// A class representing state transitions
 /// It has a map representing the pattern of state transitions
+@immutable
 final class Graph<STATE extends Object, ACTION extends Object> {
   /// Creates a new graph with the given transition pattern map
   const Graph(this.transitionPatternMap);
@@ -46,6 +47,7 @@ typedef StateTransitionFunction<STATE extends Object, ACTION extends Object,
     = TransitionTo<STATE> Function(ON_STATE currentState, ACTION action);
 
 /// A class representing the state after the
+@immutable
 final class TransitionTo<STATE extends Object> {
   /// Creates a new transition to with the given state
   const TransitionTo(this.toState);
@@ -72,6 +74,7 @@ sealed class Transition<STATE extends Object, ACTION extends Object> {
 /// also holds the state after the transition. The state before the transition
 /// and the action are inherited from Transition, and the state after the
 /// transition is added.
+@immutable
 final class Valid<STATE extends Object, ACTION extends Object>
     extends Transition<STATE, ACTION> {
   /// Creates a new valid transition with the given state
@@ -84,6 +87,7 @@ final class Valid<STATE extends Object, ACTION extends Object>
 /// A class representing the state transition pattern when the transition is
 /// invalid. It has the same state before the transition and the action as
 /// Transition, but it does not have the state after the transition.
+@immutable
 final class Invalid<STATE extends Object, ACTION extends Object>
     extends Transition<STATE, ACTION> {
   /// Creates a new invalid transition
@@ -92,9 +96,18 @@ final class Invalid<STATE extends Object, ACTION extends Object>
 
 /// A class that performs type matching.
 /// By specifying this as the key of a Map, you can write branching logic that
+@immutable
 final class Matcher<T> {
   /// Creates a new matcher
   const Matcher();
+
+  @override
+  bool operator ==(Object other) {
+    return other is Matcher<T>;
+  }
+
+  @override
+  int get hashCode => T.hashCode;
 
   /// Returns true if the given value matches the type T
   bool matches(dynamic value) {
@@ -111,6 +124,7 @@ typedef StateConfigBuilderFunction<STATE extends Object, ACTION extends Object,
 );
 
 /// A builder for building the [Graph]
+@immutable
 class GraphBuilder<STATE extends Object, ACTION extends Object> {
   ///
   final Map<Matcher<STATE>, GraphState<STATE, ACTION>> _stateConfigMap = {};
@@ -122,7 +136,7 @@ class GraphBuilder<STATE extends Object, ACTION extends Object> {
     StateConfigBuilderFunction<STATE, ACTION, ON_STATE> stateConfigBuilder,
   ) {
     assert(
-      _stateConfigMap[Matcher<ON_STATE>()] == null,
+      !_stateConfigMap.containsKey(Matcher<ON_STATE>()),
       'Duplicate state: $ON_STATE',
     );
     // Generate a StateConfigBuilder here and register it in the Map
@@ -138,6 +152,7 @@ class GraphBuilder<STATE extends Object, ACTION extends Object> {
 }
 
 /// Builder for building [GraphState]
+@immutable
 class StateConfigBuilder<STATE extends Object, ACTION extends Object,
     ON_STATE extends STATE> {
   final GraphState<STATE, ACTION> _stateFactor = GraphState<STATE, ACTION>({});

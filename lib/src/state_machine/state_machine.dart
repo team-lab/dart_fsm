@@ -4,6 +4,7 @@
 import 'dart:async';
 
 import 'package:dart_fsm/src/state_machine/implementation/state_machine_impl.dart';
+import 'package:meta/meta.dart';
 
 part './side_effect/side_effect_creators.dart';
 part './side_effect/side_effects.dart';
