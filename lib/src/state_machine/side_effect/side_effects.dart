@@ -10,14 +10,14 @@ part of '../state_machine.dart';
 /// [FinallySideEffect] executed regardless of whether a transition is made
 /// after an Action is dispatched.
 abstract interface class SideEffect {
-  const SideEffect();
+  const SideEffect(); // coverage:ignore-line
 }
 
 /// [SideEffect] executed after the [ACTION] is dispatched and the [STATE] is
 /// changed. This [SideEffect] is executed only when the transition is made.
 abstract interface class AfterSideEffect<STATE extends Object,
     ACTION extends Object> extends SideEffect {
-  const AfterSideEffect();
+  const AfterSideEffect(); // coverage:ignore-line
 
   /// The method executed after the instance of [AfterSideEffect] is generated
   /// by [AfterSideEffectCreator].
@@ -33,7 +33,7 @@ abstract interface class AfterSideEffect<STATE extends Object,
 /// made.
 abstract interface class BeforeSideEffect<STATE extends Object,
     ACTION extends Object> extends SideEffect {
-  const BeforeSideEffect();
+  const BeforeSideEffect(); // coverage:ignore-line
 
   /// The method executed after the instance of [BeforeSideEffect] is generated
   /// by [BeforeSideEffectCreator].
@@ -50,7 +50,7 @@ abstract interface class BeforeSideEffect<STATE extends Object,
 /// transition is made.
 abstract interface class FinallySideEffect<STATE extends Object,
     ACTION extends Object> extends SideEffect {
-  const FinallySideEffect();
+  const FinallySideEffect(); // coverage:ignore-line
 
   /// The method executed after the instance of [FinallySideEffect] is generated
   /// by [FinallySideEffectCreator].

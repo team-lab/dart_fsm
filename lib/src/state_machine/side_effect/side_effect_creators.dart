@@ -7,7 +7,7 @@ part of '../state_machine.dart';
 // ignore: one_member_abstracts
 abstract interface class SideEffectCreator<STATE extends Object,
     ACTION extends Object, SIDE_EFFECT extends SideEffect> {
-  const SideEffectCreator._();
+  const SideEffectCreator._(); // coverage:ignore-line
 
   /// Create a [SIDE_EFFECT] from the [STATE] and [ACTION] before the transition
   /// [prevState] The state before the transition
@@ -20,14 +20,14 @@ abstract interface class SideEffectCreator<STATE extends Object,
 abstract interface class AfterSideEffectCreator<STATE extends Object,
         ACTION extends Object, SIDE_EFFECT extends AfterSideEffect>
     implements SideEffectCreator<STATE, ACTION, SIDE_EFFECT> {
-  const AfterSideEffectCreator._();
+  const AfterSideEffectCreator._(); // coverage:ignore-line
 }
 
 /// Interface of the class that generates SideEffect before the transition
 abstract interface class BeforeSideEffectCreator<STATE extends Object,
         ACTION extends Object, SIDE_EFFECT extends BeforeSideEffect>
     implements SideEffectCreator<STATE, ACTION, SIDE_EFFECT> {
-  const BeforeSideEffectCreator._();
+  const BeforeSideEffectCreator._(); // coverage:ignore-line
 }
 
 /// Interface of the class that generates SideEffect that is executed at the
@@ -36,5 +36,5 @@ abstract interface class BeforeSideEffectCreator<STATE extends Object,
 abstract interface class FinallySideEffectCreator<STATE extends Object,
         ACTION extends Object, SIDE_EFFECT extends FinallySideEffect>
     implements SideEffectCreator<STATE, ACTION, SIDE_EFFECT> {
-  const FinallySideEffectCreator._();
+  const FinallySideEffectCreator._(); // coverage:ignore-line
 }

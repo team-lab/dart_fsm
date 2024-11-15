@@ -13,7 +13,7 @@ part of '../state_machine.dart';
 // ignore: one_member_abstracts
 abstract interface class Subscription<STATE extends Object,
     ACTION extends Object> {
-  const Subscription();
+  const Subscription(); // coverage:ignore-line
 
   /// The method executed after the instance of [Subscription] is registered
   /// with [StateMachine].

@@ -14,7 +14,7 @@ part 'state_machine_creator.dart';
 /// A state machine.
 abstract interface class StateMachine<STATE extends Object,
     ACTION extends Object> {
-  const StateMachine();
+  const StateMachine(); // coverage:ignore-line
 
   /// The current state of the state machine.
   STATE get state;
