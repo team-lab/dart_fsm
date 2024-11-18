@@ -3,13 +3,17 @@
 // found in the LICENSE file.
 import 'dart:async';
 
+import 'package:dart_fsm/src/state_machine/graph/graph.dart';
 import 'package:dart_fsm/src/state_machine/implementation/state_machine_impl.dart';
+import 'package:dart_fsm/src/state_machine/side_effect/side_effect_creator_interface.dart';
+import 'package:dart_fsm/src/state_machine/side_effect/side_effect_interface.dart';
 import 'package:meta/meta.dart';
 
 part './side_effect/side_effect_creators.dart';
 part './side_effect/side_effects.dart';
 part './subscription/subscription.dart';
-part 'graph.dart';
+part './graph/graph_builder.dart';
+part './graph/transition.dart';
 part 'state_machine_creator.dart';
 
 /// A state machine.

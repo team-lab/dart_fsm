@@ -5,6 +5,9 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:dart_fsm/dart_fsm.dart';
+import 'package:dart_fsm/src/state_machine/graph/graph.dart';
+import 'package:dart_fsm/src/state_machine/side_effect/side_effect_creator_interface.dart';
+import 'package:dart_fsm/src/state_machine/side_effect/side_effect_interface.dart';
 
 /// A state machine implementation.
 class StateMachineImpl<STATE extends Object, ACTION extends Object>

@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:dart_fsm/src/state_machine/implementation/state_machine_impl.dart';
+import 'package:dart_fsm/src/state_machine/side_effect/side_effect_creator_interface.dart';
+import 'package:dart_fsm/src/state_machine/side_effect/side_effect_interface.dart';
 
 /// A state machine for testing.
 class TesterStateMachine<STATE extends Object, ACTION extends Object>
