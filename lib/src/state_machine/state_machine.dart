@@ -9,11 +9,11 @@ import 'package:dart_fsm/src/state_machine/side_effect/side_effect_creator_inter
 import 'package:dart_fsm/src/state_machine/side_effect/side_effect_interface.dart';
 import 'package:meta/meta.dart';
 
+part './graph/graph_builder.dart';
+part './graph/transition.dart';
 part './side_effect/side_effect_creators.dart';
 part './side_effect/side_effects.dart';
 part './subscription/subscription.dart';
-part './graph/graph_builder.dart';
-part './graph/transition.dart';
 part 'state_machine_creator.dart';
 
 /// A state machine.

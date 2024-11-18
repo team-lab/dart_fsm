@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:test/test.dart';
+
 import 'test_state_machine/test_side_effect_creators.dart';
 import 'test_state_machine/test_side_effects.dart';
 import 'test_state_machine/test_state_graph.dart';

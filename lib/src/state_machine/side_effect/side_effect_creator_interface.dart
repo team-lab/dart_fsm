@@ -6,7 +6,7 @@ import 'package:dart_fsm/src/state_machine/side_effect/side_effect_interface.dar
 /// Interface of the class that generates SideEffect
 // ignore: one_member_abstracts
 abstract interface class SideEffectCreator<STATE extends Object,
-ACTION extends Object, SIDE_EFFECT extends SideEffect> {
+    ACTION extends Object, SIDE_EFFECT extends SideEffect> {
   const SideEffectCreator._(); // coverage:ignore-line
 
   /// Create a [SIDE_EFFECT] from the [STATE] and [ACTION] before the transition

@@ -13,7 +13,7 @@ final class TestSubscription implements Subscription<TestState, TestAction> {
   });
 
   final void Function(StateMachine<TestState, TestAction> stateMachine)
-  testSubscribe;
+      testSubscribe;
   final void Function() testDispose;
 
   @override

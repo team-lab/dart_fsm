@@ -13,11 +13,11 @@ class GraphBuilder<STATE extends Object, ACTION extends Object> {
   /// When ON_STATE and ON_ACTION are dispatched, transition to the state
   /// specified in transition.
   void state<ON_STATE extends STATE>(
-      StateConfigBuilderFunction<STATE, ACTION, ON_STATE> stateConfigBuilder,
-      ) {
+    StateConfigBuilderFunction<STATE, ACTION, ON_STATE> stateConfigBuilder,
+  ) {
     assert(
-    !_stateConfigMap.containsKey(Matcher<ON_STATE>()),
-    'Duplicate state: $ON_STATE',
+      !_stateConfigMap.containsKey(Matcher<ON_STATE>()),
+      'Duplicate state: $ON_STATE',
     );
     // Generate a StateConfigBuilder here and register it in the Map
     _stateConfigMap[Matcher<ON_STATE>()] =
