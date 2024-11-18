@@ -1,3 +1,6 @@
+## 1.2.0
+- chore: Control class visibility from outside the package
+
 ## 1.1.1
 - chore: downgrade meta package version to 1.15.0
 
