@@ -1,6 +1,7 @@
 // Copyright (c) 2024, teamLab inc.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
 part of '../state_machine.dart';
 
 /// [Subscription] is one of the components of [StateMachine] and is registered

@@ -1,6 +1,7 @@
 // Copyright (c) 2024, teamLab inc.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:dart_fsm/src/state_machine/implementation/state_machine_impl.dart';
 import 'package:dart_fsm/src/state_machine/side_effect/side_effect_creator_interface.dart';
