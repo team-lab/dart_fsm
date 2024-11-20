@@ -4,8 +4,8 @@
 
 part of '../state_machine.dart';
 
-/// [Subscription] is one of the components of [StateMachine] and is registered
-/// with [StateMachine].
+/// [Subscription] is a component which can be registered to [StateMachine] to
+/// monitor changes of the state.
 /// This is mainly used to monitor a change in state and to instruct
 /// [StateMachine] to perform some processing based on that change.
 /// For example, it is conceivable to monitor the connection status of WebSocket

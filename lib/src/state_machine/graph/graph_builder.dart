@@ -11,8 +11,8 @@ class GraphBuilder<STATE extends Object, ACTION extends Object> {
   final Map<Matcher<STATE>, GraphState<STATE, ACTION>> _stateConfigMap = {};
 
   /// Used to define actions that can be taken in a specific state.
-  /// When ON_STATE and ON_ACTION are dispatched, transition to the state
-  /// specified in transition.
+  /// When ACTION is dispatched while it's ON_STATE, the transition to the
+  /// specified state will happen.
   void state<ON_STATE extends STATE>(
     StateConfigBuilderFunction<STATE, ACTION, ON_STATE> stateConfigBuilder,
   ) {

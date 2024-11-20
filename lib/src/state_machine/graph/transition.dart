@@ -5,8 +5,8 @@
 part of '../state_machine.dart';
 
 /// A parent class for representing state transition patterns
-/// It is common to have the state before the transition and the action, and
-/// this class is inherited by Valid and Invalid to branch.
+/// The parent of Valid and Invalid class, which holds the state before the
+/// transition and the action which caused the transition.
 sealed class Transition<STATE extends Object, ACTION extends Object> {
   const Transition(this.fromState, this.action);
 
@@ -18,8 +18,8 @@ sealed class Transition<STATE extends Object, ACTION extends Object> {
 }
 
 /// A class representing the state transition pattern when the transition is
-/// valid. In addition to the state before the transition and the action, it
-/// also holds the state after the transition. The state before the transition
+/// valid. In addition to the properties defined by the parent(Transition)
+/// it also holds the state after the transition.The state before the transition
 /// and the action are inherited from Transition, and the state after the
 /// transition is added.
 @immutable
