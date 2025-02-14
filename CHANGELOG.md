@@ -1,3 +1,6 @@
+## 1.2.1
+- chore: Relax version constraint for test package to ensure forward compatibility
+
 ## 1.2.0
 - chore: Control class visibility from outside the package
 
