@@ -1,3 +1,6 @@
+## 1.2.2
+- fix: Prevent dispatching actions after state machine is closed
+
 ## 1.2.1
 - chore: Relax version constraint for test package to ensure forward compatibility
 
