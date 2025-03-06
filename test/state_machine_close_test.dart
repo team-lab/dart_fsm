@@ -60,5 +60,25 @@ void main() {
 
       expect(isCloseCalled, isTrue);
     });
+
+    test('dispatch after state machine is closed should be ignored', () {
+      final stateMachine = createStateMachine(
+        initialState: const TestStateA(),
+        graphBuilder: simpleTestStateGraph,
+      )
+        ..close()
+        ..dispatch(const TestActionA());
+
+      expect(stateMachine.state, const TestStateA());
+    });
+
+    test('dispatch after state machine is closed should not throw error', () {
+      final stateMachine = createStateMachine(
+        initialState: const TestStateA(),
+        graphBuilder: simpleTestStateGraph,
+      )..close();
+
+      expect(() => stateMachine.dispatch(const TestActionA()), returnsNormally);
+    });
   });
 }
