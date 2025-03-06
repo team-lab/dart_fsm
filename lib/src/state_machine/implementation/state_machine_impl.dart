@@ -67,6 +67,9 @@ class StateMachineImpl<STATE extends Object, ACTION extends Object>
 
   @override
   void dispatch(ACTION action) {
+    if (_controller.isClosed) {
+      return;
+    }
     beforeJob(action);
     final transition = findTransition(_state, action);
     if (transition is Valid) {
