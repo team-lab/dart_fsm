@@ -196,7 +196,7 @@ Now that the `SampleSideEffect` to make API calls and the `SampleSideEffectCreat
 final stateMachine = createStateMachine(
   initialState: const SampleStateInitial(),
   graphBuilder: stateGraph,
-  sideEffectCreator: SampleSideEffectCreator(apiClient),
+  sideEffectCreators: [SampleSideEffectCreator(apiClient)],
 );
 ```
 This registers the side effect to make API calls with the finite state machine. Each time a state transition occurs, the `SampleSideEffectCreator` is called, and if the action that caused the transition is `Fetch`, a `SampleSideEffect` is generated, and the API is called.
@@ -240,8 +240,8 @@ This defines a `Subscription` to receive data from the `WebSocketClient` and iss
 final stateMachine = createStateMachine(
   initialState: const SampleStateInitial(),
   graphBuilder: stateGraph,
-  sideEffectCreator: SampleSideEffectCreator(apiClient),
-  subscription: SampleSubscription(webSocketClient),
+  sideEffectCreators: [SampleSideEffectCreator(apiClient)],
+  subscriptions: [SampleSubscription(webSocketClient)],
 );
 ```
 This registers the `Subscription` with the finite state machine to receive data from the `WebSocketClient` and issue `SampleActionUpdate` based on the data.
