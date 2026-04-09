@@ -207,7 +207,7 @@ final class SampleSideEffect
 final stateMachine = createStateMachine(
   initialState: const SampleStateInitial(),
   graphBuilder: stateGraph,
-  sideEffectCreator: SampleSideEffectCreator(apiClient),
+  sideEffectCreators: [SampleSideEffectCreator(apiClient)],
 );
 ```
 これでApiを呼び出す副作用が有限オートマトンに登録されました。
@@ -255,8 +255,8 @@ final class SampleSubscription
 final stateMachine = createStateMachine(
   initialState: const SampleStateInitial(),
   graphBuilder: stateGraph,
-  sideEffectCreator: SampleSideEffectCreator(apiClient),
-  subscription: SampleSubscription(webSocketClient),
+  sideEffectCreators: [SampleSideEffectCreator(apiClient)],
+  subscriptions: [SampleSubscription(webSocketClient)],
 );
 ```
 これでWebSocketClientからデータを受け取り、データをもとにSampleActionUpdateを発行するSubscriptionが有限オートマトンに登録されました。
