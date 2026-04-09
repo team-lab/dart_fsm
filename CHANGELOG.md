@@ -1,3 +1,6 @@
+## 1.2.3
+- docs: Fix `createStateMachine` argument names (thanks @djoeressen !)
+
 ## 1.2.2
 - fix: Prevent dispatching actions after state machine is closed
 
