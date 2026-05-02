@@ -147,8 +147,8 @@ stateDiagram-v2
 Suppose you want to trigger a side effect of making an API call when transitioning to the `Loading` state. To implement such side effects, define the side effects using `SideEffectCreator` and `SideEffect`. `SideEffectCreator` is a class for generating side effects, and `SideEffect` represents the side effects.
 There are three types: `After`, `Before`, and `Finally`, which are called at the following times:
 
-•   `AfterSideEffectCreator`: Executed immediately after an action is issued, before the state transitions.
-•   `BeforeSideEffectCreator`: Executed after an action is issued and the state transition has occurred.
+•   `BeforeSideEffectCreator`: Executed immediately after an action is issued, before the state transitions.
+•   `AfterSideEffectCreator`: Executed after an action is issued and the state transition has occurred.
 •   `FinallySideEffectCreator`: Executed after an action is issued, regardless of whether the state transition has occurred.
 
 In many cases, `AfterSideEffectCreator` is the most frequently used and is suitable for generating side effects such as API calls or saving data that occur as a result of state transitions.
