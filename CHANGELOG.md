@@ -1,3 +1,6 @@
+## 1.2.4
+- docs: Correct side effect description (thanks @ParkJong-Hun !)
+
 ## 1.2.3
 - docs: Fix `createStateMachine` argument names (thanks @djoeressen !)
 
