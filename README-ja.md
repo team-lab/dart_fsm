@@ -157,8 +157,8 @@ stateDiagram-v2
 このような副作用を発生させるためにはSideEffectCreatorおよびSideEffectを用いて副作用を定義します。
 SideEffectCreatorは副作用を生成するためのクラスであり、SideEffectは副作用を表すクラスです。
 Before、After、Finallyの3種類が存在し以下のタイミングで呼び出されます。
-* AfterSideEffectCreator: アクションが発行された直後、状態遷移前に実行される
-* BeforeSideEffectCreator: アクションが発行され、状態の遷移が行われた後に実行される
+* BeforeSideEffectCreator: アクションが発行された直後、状態遷移前に実行される
+* AfterSideEffectCreator: アクションが発行され、状態の遷移が行われた後に実行される
 * FinallySideEffectCreator: アクションが発行された後、状態の遷移が行われたか否かにかかわらず実行される
 
 最も使用頻度が高いのは多くの場合でAfterSideEffectCreatorであり、
