@@ -1,3 +1,8 @@
+## 1.3.0
+- feat: Add `runStateMachineTestCases`, a declarative Given-When-Then test DSL with exhaustive state/action coverage
+- feat: Deprecate `StateMachineTester`, `SMAssertObject`, and `TesterStateMachine` in favor of the new test DSL; the legacy APIs remain available for migration
+- fix: Support asynchronous arrange, verification, and lifecycle hooks, and ensure teardown runs after every generated test
+
 ## 1.2.4
 - docs: Correct side effect description (thanks @ParkJong-Hun !)
 
