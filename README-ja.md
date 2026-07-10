@@ -316,6 +316,7 @@ runner は `states x actions` のすべての組み合わせに対する coverag
 登録します。非同期 SideEffect が後続遷移を起こす場合は
 `transitionExpectationIs(after: ..., eventually: ...)` を使います。外部依存は
 `createMocks` で渡し、`arrange` で準備し、`verify` で呼び出しを検証できます。
+どちらのコールバックも非同期処理を返すことができ、runnerは完了を待ちます。
 
 `StateMachineTester`、`SMAssertObject`、`TesterStateMachine` は非推奨です。
 既存テストは `runStateMachineTestCases` へ移行してください。

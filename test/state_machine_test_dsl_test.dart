@@ -8,6 +8,7 @@ import 'package:test/test.dart';
 
 void main() {
   var isCaseActive = false;
+  var hasCompletedAsyncVerify = true;
 
   runStateMachineTestCases<_State, _Action, _Dependencies>(
     name: 'StateMachine test DSL',
@@ -39,12 +40,16 @@ void main() {
               after: const _Loading(),
               eventually: const _Loaded(),
             ),
-            arrange: (dependencies) {
+            arrange: (dependencies) async {
+              await Future<void>.delayed(Duration.zero);
               dependencies.loadedValue = 'loaded';
+              hasCompletedAsyncVerify = false;
             },
-            verify: (dependencies) {
+            verify: (dependencies) async {
+              await Future<void>.delayed(Duration.zero);
               expect(dependencies.loadedValue, 'loaded');
               expect(dependencies.loadCallCount, 1);
+              hasCompletedAsyncVerify = true;
             },
           ),
           ifDispatched(
@@ -82,10 +87,12 @@ void main() {
     ],
     beforeEach: () {
       expect(isCaseActive, isFalse);
+      expect(hasCompletedAsyncVerify, isTrue);
       isCaseActive = true;
     },
     afterEach: () {
       expect(isCaseActive, isTrue);
+      expect(hasCompletedAsyncVerify, isTrue);
       isCaseActive = false;
     },
   );
@@ -153,6 +160,9 @@ final class _Dependencies {
   int loadCallCount = 0;
 
   Future<void> load() async {
+    if (loadedValue == null) {
+      throw StateError('load called before arrange completed');
+    }
     loadCallCount++;
     await Future<void>.delayed(Duration.zero);
   }

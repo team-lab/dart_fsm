@@ -29,14 +29,20 @@ typedef StateMachineTestCases<STATE extends Object, ACTION extends Object,
 /// Arranges external dependencies before an action is dispatched.
 ///
 /// Keep repository stubbing here so that the transition expectation remains
-/// separate from dependency setup.
-typedef MockArrange<MOCKS extends Object> = void Function(MOCKS mocks);
+/// separate from dependency setup. The runner waits for asynchronous setup to
+/// complete before creating the StateMachine.
+typedef MockArrange<MOCKS extends Object> = FutureOr<void> Function(
+  MOCKS mocks,
+);
 
 /// Verifies external dependency interactions after a transition settles.
 ///
 /// Keep repository verification here so that side effects are asserted
-/// separately from state transitions.
-typedef MockVerify<MOCKS extends Object> = void Function(MOCKS mocks);
+/// separately from state transitions. The runner waits for asynchronous
+/// verification to complete before cleaning up the test case.
+typedef MockVerify<MOCKS extends Object> = FutureOr<void> Function(
+  MOCKS mocks,
+);
 
 /// Runs custom setup or teardown around each generated test case.
 typedef StateMachineTestHook = FutureOr<void> Function();
@@ -49,6 +55,9 @@ typedef StateMachineTestHook = FutureOr<void> Function();
 ///
 /// It also registers a coverage test that fails when any `states x actions`
 /// pair is missing from [cases], or when unexpected cases exist.
+///
+/// [afterEach] is invoked for every generated transition test even when setup,
+/// execution, or earlier cleanup fails.
 void runStateMachineTestCases<STATE extends Object, ACTION extends Object,
     MOCKS extends Object>({
   required String name,
@@ -74,13 +83,16 @@ void runStateMachineTestCases<STATE extends Object, ACTION extends Object,
         for (final actionCase in stateCase._actions) {
           final description = actionCase._describe(stateCase._initial);
           test(description, () async {
-            await beforeEach?.call();
             fsm.StateMachine<STATE, ACTION>? stateMachine;
             _StateStreamProbe<STATE>? stateStreamProbe;
 
             try {
+              await beforeEach?.call();
               final mocks = createMocks();
-              actionCase._arrange?.call(mocks);
+              final arrange = actionCase._arrange;
+              if (arrange != null) {
+                await arrange(mocks);
+              }
               stateMachine = createStateMachine(mocks, stateCase._initial);
               stateStreamProbe = _StateStreamProbe<STATE>(
                 stateMachine.stateStream,
@@ -106,11 +118,20 @@ void runStateMachineTestCases<STATE extends Object, ACTION extends Object,
                 actionCase._finallyState(stateCase._initial),
                 reason: context,
               );
-              actionCase._verify?.call(mocks);
+              final verify = actionCase._verify;
+              if (verify != null) {
+                await verify(mocks);
+              }
             } finally {
-              await stateStreamProbe?.cancel();
-              stateMachine?.close();
-              await afterEach?.call();
+              try {
+                await stateStreamProbe?.cancel();
+              } finally {
+                try {
+                  stateMachine?.close();
+                } finally {
+                  await afterEach?.call();
+                }
+              }
             }
           });
         }

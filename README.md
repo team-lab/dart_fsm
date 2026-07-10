@@ -302,7 +302,8 @@ The runner adds a coverage test for every value in the `states x actions`
 matrix. Use `transitionExpectationIs(after: ..., eventually: ...)` when an
 asynchronous side effect causes a follow-up transition. External dependencies
 can be supplied by `createMocks`, prepared with `arrange`, and checked with
-`verify`.
+`verify`. Both callbacks may be asynchronous; the runner waits for them to
+complete.
 
 `StateMachineTester`, `SMAssertObject`, and `TesterStateMachine` are
 deprecated. Existing tests should migrate to `runStateMachineTestCases`.
