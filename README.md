@@ -247,8 +247,66 @@ final stateMachine = createStateMachine(
 This registers the `Subscription` with the finite state machine to receive data from the `WebSocketClient` and issue `SampleActionUpdate` based on the data.
 
 ### Implementing Tests Using Finite State Machines
-TODO
 
+The test DSL exported by `dart_fsm_test_tools.dart` describes transition
+tests in a Given-When-Then form. It creates a fresh, real `StateMachine` for
+each state/action pair and verifies both state values and `stateStream`
+emissions.
+
+```dart
+import 'package:dart_fsm/dart_fsm.dart';
+import 'package:dart_fsm/dart_fsm_test_tools.dart';
+
+void main() {
+  runStateMachineTestCases<SampleState, SampleAction, Object>(
+    name: 'SampleStateMachine',
+    createMocks: Object.new,
+    createStateMachine: (_, initialState) => createStateMachine(
+      graphBuilder: stateGraph,
+      initialState: initialState,
+    ),
+    states: const [
+      SampleStateInitial(),
+      SampleStateLoading(),
+    ],
+    actions: const [
+      SampleActionFetch(),
+    ],
+    cases: [
+      whenInitialStateIs(
+        const SampleStateInitial(),
+        actions: [
+          ifDispatched(
+            const SampleActionFetch(),
+            then: transitionExpectationIs(
+              after: const SampleStateLoading(),
+            ),
+          ),
+        ],
+      ),
+      whenInitialStateIs(
+        const SampleStateLoading(),
+        actions: [
+          ifDispatched(
+            const SampleActionFetch(),
+            then: expectInvalidTransition(),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+```
+
+The runner adds a coverage test for every value in the `states x actions`
+matrix. Use `transitionExpectationIs(after: ..., eventually: ...)` when an
+asynchronous side effect causes a follow-up transition. External dependencies
+can be supplied by `createMocks`, prepared with `arrange`, and checked with
+`verify`. Both callbacks may be asynchronous; the runner waits for them to
+complete.
+
+`StateMachineTester`, `SMAssertObject`, and `TesterStateMachine` are
+deprecated. Existing tests should migrate to `runStateMachineTestCases`.
 
 ## Example Usage
 ```dart

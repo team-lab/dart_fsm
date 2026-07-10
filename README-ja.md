@@ -262,8 +262,64 @@ final stateMachine = createStateMachine(
 これでWebSocketClientからデータを受け取り、データをもとにSampleActionUpdateを発行するSubscriptionが有限オートマトンに登録されました。
 
 ### 有限オートマトンを用いたテストの実装
-TODO
 
+`dart_fsm_test_tools.dart` が公開するテスト DSL を使うと、状態遷移テストを
+Given-When-Then 形式で記述できます。各 state/action の組み合わせごとに実物の
+`StateMachine` を新しく生成し、状態値と `stateStream` の emission を検証します。
+
+```dart
+import 'package:dart_fsm/dart_fsm.dart';
+import 'package:dart_fsm/dart_fsm_test_tools.dart';
+
+void main() {
+  runStateMachineTestCases<SampleState, SampleAction, Object>(
+    name: 'SampleStateMachine',
+    createMocks: Object.new,
+    createStateMachine: (_, initialState) => createStateMachine(
+      graphBuilder: stateGraph,
+      initialState: initialState,
+    ),
+    states: const [
+      SampleStateInitial(),
+      SampleStateLoading(),
+    ],
+    actions: const [
+      SampleActionFetch(),
+    ],
+    cases: [
+      whenInitialStateIs(
+        const SampleStateInitial(),
+        actions: [
+          ifDispatched(
+            const SampleActionFetch(),
+            then: transitionExpectationIs(
+              after: const SampleStateLoading(),
+            ),
+          ),
+        ],
+      ),
+      whenInitialStateIs(
+        const SampleStateLoading(),
+        actions: [
+          ifDispatched(
+            const SampleActionFetch(),
+            then: expectInvalidTransition(),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+```
+
+runner は `states x actions` のすべての組み合わせに対する coverage test も
+登録します。非同期 SideEffect が後続遷移を起こす場合は
+`transitionExpectationIs(after: ..., eventually: ...)` を使います。外部依存は
+`createMocks` で渡し、`arrange` で準備し、`verify` で呼び出しを検証できます。
+どちらのコールバックも非同期処理を返すことができ、runnerは完了を待ちます。
+
+`StateMachineTester`、`SMAssertObject`、`TesterStateMachine` は非推奨です。
+既存テストは `runStateMachineTestCases` へ移行してください。
 
 ## 使用例
 ```dart

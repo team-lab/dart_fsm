@@ -8,9 +8,15 @@ import 'package:dart_fsm/src/state_machine/side_effect/side_effect_creator_inter
 import 'package:dart_fsm/src/state_machine/side_effect/side_effect_interface.dart';
 
 /// A state machine for testing.
+///
+/// Use a real StateMachine with `runStateMachineTestCases` instead.
+@Deprecated('Use a real StateMachine with runStateMachineTestCases instead.')
 class TesterStateMachine<STATE extends Object, ACTION extends Object>
     extends StateMachineImpl<STATE, ACTION> {
   /// Creates a state machine for testing.
+  @Deprecated(
+    'Use a real StateMachine with runStateMachineTestCases instead.',
+  )
   TesterStateMachine({
     required super.graphBuilder,
     required super.initialState,
