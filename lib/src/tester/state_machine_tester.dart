@@ -10,8 +10,12 @@ import 'package:dart_fsm/src/tester/tester_state_machine.dart';
 import 'package:test/test.dart';
 
 /// This class is used to test the state machine.
+///
+/// Use `runStateMachineTestCases` instead.
+@Deprecated('Use runStateMachineTestCases instead.')
 class StateMachineTester<STATE extends Object, ACTION extends Object> {
   /// Creates a state machine tester.
+  @Deprecated('Use runStateMachineTestCases instead.')
   StateMachineTester({
     required GraphBuilder<STATE, ACTION> graphBuilder,
     List<SideEffectCreator<STATE, ACTION, SideEffect>> sideEffectCreators =
@@ -82,8 +86,19 @@ class StateMachineTester<STATE extends Object, ACTION extends Object> {
 }
 
 /// This class is used to store the test case information.
+///
+/// Use `ifDispatched` with `transitionExpectationIs` or
+/// `expectInvalidTransition` instead.
+@Deprecated(
+  'Use ifDispatched with transitionExpectationIs or '
+  'expectInvalidTransition instead.',
+)
 final class SMAssertObject<S extends Object, A extends Object> {
   /// Creates a test case object.
+  @Deprecated(
+    'Use ifDispatched with transitionExpectationIs or '
+    'expectInvalidTransition instead.',
+  )
   const SMAssertObject({
     required this.action,
     this.afterState,

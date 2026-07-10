@@ -317,6 +317,9 @@ runner は `states x actions` のすべての組み合わせに対する coverag
 `transitionExpectationIs(after: ..., eventually: ...)` を使います。外部依存は
 `createMocks` で渡し、`arrange` で準備し、`verify` で呼び出しを検証できます。
 
+`StateMachineTester`、`SMAssertObject`、`TesterStateMachine` は非推奨です。
+既存テストは `runStateMachineTestCases` へ移行してください。
+
 ## 使用例
 ```dart
 import 'package:dart_fsm/dart_fsm.dart';

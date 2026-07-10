@@ -304,6 +304,9 @@ asynchronous side effect causes a follow-up transition. External dependencies
 can be supplied by `createMocks`, prepared with `arrange`, and checked with
 `verify`.
 
+`StateMachineTester`, `SMAssertObject`, and `TesterStateMachine` are
+deprecated. Existing tests should migrate to `runStateMachineTestCases`.
+
 ## Example Usage
 ```dart
 import 'package:dart_fsm/dart_fsm.dart';
