@@ -1,3 +1,8 @@
+## 1.3.1
+- fix: Improve intermediate state verification in the StateMachine test DSL to support chained side effects
+- fix: Verify that invalid transitions emit no state
+- docs: Document the behavior of `after` and `eventually` expectations in the test DSL
+
 ## 1.3.0
 - feat: Add `runStateMachineTestCases`, a declarative Given-When-Then test DSL with exhaustive state/action coverage
 - feat: Deprecate `StateMachineTester`, `SMAssertObject`, and `TesterStateMachine` in favor of the new test DSL; the legacy APIs remain available for migration
