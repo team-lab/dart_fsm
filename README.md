@@ -252,7 +252,7 @@ The test DSL exported by `dart_fsm_test_tools.dart` describes transition
 tests in a Given-When-Then form. It creates a fresh, real `StateMachine` for
 each state/action pair and verifies both state values and `stateStream`
 emissions. The `after` expectation checks the state immediately after dispatch,
-and the `finally` expectation verifies the expected final state.
+and the `eventually` expectation verifies the expected final state.
 
 ```dart
 import 'package:dart_fsm/dart_fsm.dart';
