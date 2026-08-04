@@ -50,9 +50,9 @@ typedef StateMachineTestHook = FutureOr<void> Function();
 /// Registers exhaustive Given-When-Then transition tests for a StateMachine.
 ///
 /// The runner creates a fresh real StateMachine for each state/action pair,
-/// dispatches the action, verifies the immediate state, waits for the expected
-/// final state to be emitted, and finally verifies the settled state. Invalid
-/// transitions are also checked to ensure that they emit no state.
+/// dispatches the action, verifies the first emitted state, waits for the
+/// expected final state to be emitted, and finally verifies the settled state.
+/// Invalid transitions are also checked to ensure that they emit no state.
 /// Intermediate stateStream emissions for valid transitions are intentionally
 /// ignored so chained side effects can be tested through their immediate and
 /// final states.
@@ -88,8 +88,8 @@ void runStateMachineTestCases<STATE extends Object, ACTION extends Object,
           final description = actionCase._describe(stateCase._initial);
           test(description, () async {
             fsm.StateMachine<STATE, ACTION>? stateMachine;
+            _StateStreamProbe<STATE>? stateStreamProbe;
             _NoStateEmissionProbe<STATE>? noStateEmissionProbe;
-            Future<void>? finalStateWait;
 
             try {
               await beforeEach?.call();
@@ -106,21 +106,19 @@ void runStateMachineTestCases<STATE extends Object, ACTION extends Object,
                   stateMachine.stateStream,
                 );
               } else {
-                finalStateWait = _waitForFinalState(
+                stateStreamProbe = _StateStreamProbe(
                   stateMachine.stateStream,
                   actionCase._finallyState(stateCase._initial),
-                  context,
                 );
               }
               stateMachine.dispatch(actionCase._dispatch);
 
-              expect(
-                stateMachine.state,
-                actionCase._afterState(stateCase._initial),
-                reason: context,
-              );
-              if (finalStateWait != null) {
-                await finalStateWait;
+              if (stateStreamProbe != null) {
+                await stateStreamProbe.expectFirstState(
+                  actionCase._afterState(stateCase._initial),
+                  context,
+                );
+                await stateStreamProbe.expectFinalState(context);
               } else {
                 await noStateEmissionProbe!.expectNoEmission(context);
               }
@@ -132,12 +130,16 @@ void runStateMachineTestCases<STATE extends Object, ACTION extends Object,
               await actionCase._verify?.call(mocks);
             } finally {
               try {
-                await noStateEmissionProbe?.cancel();
+                await stateStreamProbe?.cancel();
               } finally {
                 try {
-                  stateMachine?.close();
+                  await noStateEmissionProbe?.cancel();
                 } finally {
-                  await afterEach?.call();
+                  try {
+                    stateMachine?.close();
+                  } finally {
+                    await afterEach?.call();
+                  }
                 }
               }
             }
@@ -186,8 +188,9 @@ ActionCase<STATE, ACTION, MOCKS> ifDispatched<STATE extends Object,
 
 /// Expects a valid transition to [after], and optionally to [eventually].
 ///
-/// [after] is asserted immediately after dispatch. [eventually] is asserted
-/// after asynchronous side effects have emitted their follow-up state.
+/// [after] is asserted against the first state emitted by dispatch.
+/// [eventually] is asserted after asynchronous side effects have emitted their
+/// follow-up state.
 TransitionExpectation<STATE> transitionExpectationIs<STATE extends Object>({
   required STATE after,
   STATE? eventually,
@@ -384,37 +387,63 @@ final class _TransitionToExpectation<STATE extends Object>
 
 const _stateStreamExpectationTimeout = Duration(milliseconds: 100);
 
-Future<void> _waitForFinalState<STATE extends Object>(
-  Stream<STATE> stateStream,
-  STATE expectedFinalState,
-  String context,
-) async {
-  final emittedStates = <STATE>[];
-  final waiter = Completer<void>();
-  late final StreamSubscription<STATE> subscription;
-  subscription = stateStream.listen((state) {
-    emittedStates.add(state);
-    if (state == expectedFinalState && !waiter.isCompleted) {
-      waiter.complete();
-    }
-  });
+final class _StateStreamProbe<STATE extends Object> {
+  _StateStreamProbe(
+    Stream<STATE> stateStream,
+    STATE expectedFinalState,
+  ) : _expectedFinalState = expectedFinalState {
+    _subscription = stateStream.listen((state) {
+      _emittedStates.add(state);
+      if (!_firstState.isCompleted) {
+        _firstState.complete(state);
+      }
+      if (state == _expectedFinalState && !_finalState.isCompleted) {
+        _finalState.complete();
+      }
+    });
+  }
 
-  try {
-    await waiter.future.timeout(
+  final STATE _expectedFinalState;
+  final _emittedStates = <STATE>[];
+  final _firstState = Completer<STATE>();
+  final _finalState = Completer<void>();
+  late final StreamSubscription<STATE> _subscription;
+
+  Future<void> expectFirstState(
+    STATE expectedState,
+    String context,
+  ) async {
+    final actualState = await _firstState.future.timeout(
       _stateStreamExpectationTimeout,
       onTimeout: () {
         fail(
           '''
 $context
-expected final emitted state: $expectedFinalState
-actual emitted states: $emittedStates
+expected first emitted state: $expectedState
+actual emitted states: $_emittedStates
 ''',
         );
       },
     );
-  } finally {
-    await subscription.cancel();
+    expect(actualState, expectedState, reason: context);
   }
+
+  Future<void> expectFinalState(String context) async {
+    await _finalState.future.timeout(
+      _stateStreamExpectationTimeout,
+      onTimeout: () {
+        fail(
+          '''
+$context
+expected final emitted state: $_expectedFinalState
+actual emitted states: $_emittedStates
+''',
+        );
+      },
+    );
+  }
+
+  Future<void> cancel() => _subscription.cancel();
 }
 
 final class _NoStateEmissionProbe<STATE extends Object> {

@@ -4,7 +4,6 @@
 
 import 'package:dart_fsm/dart_fsm.dart';
 import 'package:dart_fsm/dart_fsm_test_tools.dart';
-import 'package:test/test.dart';
 
 void main() {
   runStateMachineTestCases<_ChainState, _ChainAction, Object>(
