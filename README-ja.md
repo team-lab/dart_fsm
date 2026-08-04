@@ -266,6 +266,7 @@ final stateMachine = createStateMachine(
 `dart_fsm_test_tools.dart` が公開するテスト DSL を使うと、状態遷移テストを
 Given-When-Then 形式で記述できます。各 state/action の組み合わせごとに実物の
 `StateMachine` を新しく生成し、状態値と `stateStream` の emission を検証します。
+`after` で dispatch 直後の状態を確認し、`eventually` で期待される最終状態を検証します。
 
 ```dart
 import 'package:dart_fsm/dart_fsm.dart';
